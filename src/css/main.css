@@ -1,0 +1,44 @@
+@import url(reset.css);
+@import url(var.css);
+
+*{
+  font-family: Montserrat, sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #E4661B;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #e77431;
+  box-shadow: -2px 0px 4px rgba(145, 9, 9, 0.25);
+}
+
+main{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .5rem;
+}
+
+#children{
+  border: 1px solid #ff00;
+  margin: 0.5rem;
+  border-radius: 8px;
+  height: calc(auto + 100vh);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 25px 0px;
+}
