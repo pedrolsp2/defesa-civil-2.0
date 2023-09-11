@@ -3,7 +3,81 @@ class NewAmbulance extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.build();
+    this.customEvents()
   }
+
+  connectedCallback() {
+    this.script();
+  }
+
+  customEvents() {
+    let submitFormAmbulance = new CustomEvent('submitFormAmbulance', { detail: {} });
+    let formAmbualance = this.shadowRoot.querySelector('#formAmbualance')
+    formAmbualance.addEventListener('submit', function (event) {
+      event.preventDefault(); // evita que a página recarregue
+      window.dispatchEvent(submitFormAmbulance);
+    });
+  }
+
+  script() {
+    // Cria um loop para preencher as options com os anos
+    const selectAno = this.shadowRoot.getElementById('ano');
+    for (let i = 1970; i <= new Date().getFullYear() + 1; i++) {
+      const option = document.createElement('option');
+      option.text = i;
+      option.value = i;
+      selectAno.add(option);
+    }
+    //Fim do loop
+
+    //Habilitar o form para novo cadastro
+    var btnNovo = this.shadowRoot.getElementById('btn-novo');
+    var btnCad = this.shadowRoot.getElementById('btn-cadastrar');
+    var txtModelo = this.shadowRoot.getElementById('modelo');
+    var txtAno = this.shadowRoot.getElementById('ano');
+    var txtPlaca = this.shadowRoot.getElementById('placa');
+    var txtSituacao = this.shadowRoot.getElementById('situacao');
+
+    btnNovo.addEventListener("click",(e)=>{
+        e.preventDefault();
+        formDisabled();
+    })
+
+    function formDisabled(){
+      if(txtModelo.disabled == true){
+        txtModelo.disabled = false;
+        txtAno.disabled = false;
+        txtPlaca.disabled = false;
+        txtSituacao.disabled = false;
+        btnCad.style.visibility = 'visible';
+        btnNovo.value = "Cancelar";
+      }
+      else{
+          txtModelo.disabled = true;
+          txtAno.disabled = true;
+          txtPlaca.disabled = true;
+          txtSituacao.disabled = true;
+          btnCad.style.visibility = 'hidden';
+          btnNovo.value = "Nova ambulancia";
+      }
+    }
+
+    txtPlaca.addEventListener("blur",()=>{
+      const spanAlerta = this.shadowRoot.getElementById('alertPlaca');
+      const placaValor = txtPlaca.value;
+      const padraoAntigo = /^[A-Za-z]{3}[0-9]{4}$/;
+      const padraoMercosul = /^[A-Za-z]{3}[0-9][A-Za-z][0-9]{2}$/;
+    
+      if (padraoAntigo.test(placaValor)) {
+        spanAlerta.innerHTML = "";
+      } else if (padraoMercosul.test(placaValor)) {
+        spanAlerta.innerHTML = "";
+      } else {
+        spanAlerta.innerHTML = "Placa Inválida.";
+      } 
+    })
+
+  } 
 
   build() {
     this.shadowRoot.innerHTML = /*HTML*/ `
@@ -100,7 +174,7 @@ class NewAmbulance extends HTMLElement {
 
       <main>
           <span class="material-symbols-outlined" id="user-icon">ambulance</span>
-          <form method="POST" id='form-ambulancia'>
+          <form method="POST" id='formAmbualance'>
               <input type="text" name="modelo" id="modelo" placeholder="Modelo" disabled required>
               <select name="ano" id="ano" disabled required>
                   <option value disabled required selected>Ano do veículo</option>
@@ -123,70 +197,6 @@ class NewAmbulance extends HTMLElement {
     `
   }
 
-  connectedCallback() {
-    this.script();
-  }
-
-  script() {
-    // Cria um loop para preencher as options com os anos
-    const selectAno = this.shadowRoot.getElementById('ano');
-    for (let i = 1970; i <= new Date().getFullYear() + 1; i++) {
-      const option = document.createElement('option');
-      option.text = i;
-      option.value = i;
-      selectAno.add(option);
-    }
-    //Fim do loop
-
-    //Habilitar o form para novo cadastro
-    var btnNovo = this.shadowRoot.getElementById('btn-novo');
-    var btnCad = this.shadowRoot.getElementById('btn-cadastrar');
-    var txtModelo = this.shadowRoot.getElementById('modelo');
-    var txtAno = this.shadowRoot.getElementById('ano');
-    var txtPlaca = this.shadowRoot.getElementById('placa');
-    var txtSituacao = this.shadowRoot.getElementById('situacao');
-
-    btnNovo.addEventListener("click",(e)=>{
-        e.preventDefault();
-        formDisabled();
-    })
-
-    function formDisabled(){
-      if(txtModelo.disabled == true){
-        txtModelo.disabled = false;
-        txtAno.disabled = false;
-        txtPlaca.disabled = false;
-        txtSituacao.disabled = false;
-        btnCad.style.visibility = 'visible';
-        btnNovo.value = "Cancelar";
-      }
-      else{
-          txtModelo.disabled = true;
-          txtAno.disabled = true;
-          txtPlaca.disabled = true;
-          txtSituacao.disabled = true;
-          btnCad.style.visibility = 'hidden';
-          btnNovo.value = "Nova ambulancia";
-      }
-    }
-
-    txtPlaca.addEventListener("blur",()=>{
-      const spanAlerta = this.shadowRoot.getElementById('alertPlaca');
-      const placaValor = txtPlaca.value;
-      const padraoAntigo = /^[A-Za-z]{3}[0-9]{4}$/;
-      const padraoMercosul = /^[A-Za-z]{3}[0-9][A-Za-z][0-9]{2}$/;
-    
-      if (padraoAntigo.test(placaValor)) {
-        spanAlerta.innerHTML = "";
-      } else if (padraoMercosul.test(placaValor)) {
-        spanAlerta.innerHTML = "";
-      } else {
-        spanAlerta.innerHTML = "Placa Inválida.";
-      } 
-    })
-
-  } 
-
 }
 
-customElements.define("page-new-ambulance", NewAmbulance);
+window.customElements.define("page-new-ambulance", NewAmbulance);

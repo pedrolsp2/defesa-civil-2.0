@@ -1,12 +1,155 @@
 class SideBar extends HTMLElement {
   constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.build();
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' });
+    this.createCustomEvents()
+    this.listenerEventsfromWindow()
   }
+  static get observedAttributes() {
+    return [];
+  }
+  static get observedAttributes() {
+    return []
+  }
+  connectedCallback() {
+    const main = document.getElementById("main")
+    if (!localStorage.getItem("id")) {
+      main.innerHTML = "<page-login></page-login>";
+    }
+    this.render()
+    this.script()
+  }
+  script() {
+    const idName = this.shadowRoot.getElementById('name-user');
+    const localStorageInfo = localStorage.getItem('id')
+    const userInfo = JSON.parse(localStorageInfo)
 
-  build() {
-    this.shadowRoot.innerHTML = /*HTML*/`
+    const nameUser = userInfo.nome;
+    const idUser = userInfo.id
+
+    idName.innerHTML = nameUser;
+
+    const sidebar = this.shadowRoot.getElementById('aside');
+    const menuButton = this.shadowRoot.getElementById('menu-button');
+    const items = this.shadowRoot.getElementById('items');
+    const logo = this.shadowRoot.getElementById('logo');
+    const settinsUser = this.shadowRoot.getElementById('settins');
+
+    const textMenu = this.shadowRoot.querySelectorAll('#text-menu');
+    const links = this.shadowRoot.querySelectorAll('a[id="link"]');
+    const apps = this.shadowRoot.querySelectorAll('#apps');
+    const itemsSub = this.shadowRoot.querySelectorAll("#items > li");
+    const content = document.getElementById('children')
+
+    logo.addEventListener("click",()=>{
+      content.innerHTML = "<page-home><page-home/>"
+    })
+
+    itemsSub.forEach(item => {
+      item.addEventListener("click", () => {
+        const subItem = item.querySelector("#sub-item");
+
+        if (subItem) {
+          if (subItem.style.display === "block") {
+            subItem.style.display = "none";
+          } else {
+            subItem.style.display = "block";
+          }
+        }
+      });
+    });
+
+    menuButton.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      textMenu.forEach(item => {
+        item.classList.toggle('open-text');
+      })
+
+      settinsUser.classList.toggle('open-text');
+
+      apps.forEach(item => {
+        item.classList.toggle('apps-menu')
+      })
+
+      menuButton.classList.toggle('menu-btn')
+      items.classList.toggle('items')
+      if (menuButton.textContent == "close") {
+        menuButton.innerHTML = "menu"
+      }
+      else {
+        menuButton.innerHTML = "close"
+      }
+    });
+
+    links.forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log(item.textContent)
+        switch (item.textContent) {
+          case "Cadastrar ambulância":
+            content.innerHTML = "";
+            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
+            break;
+
+          case "Consultar ambulância":
+            content.innerHTML = "";
+            content.innerHTML = "<page-view-ambulance></page-view-ambulance>";
+            break;
+
+          case "Cadastrar motorista":
+            content.innerHTML = "";
+            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
+            break;
+
+          case "Consultar motorista":
+            content.innerHTML = "";
+            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
+            break;
+
+          case "Cadastrar ocorrências":
+            content.innerHTML = "";
+            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
+            break;
+
+          case "Consultar ocorrências":
+            content.innerHTML = "";
+            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
+            break;
+        }
+      });
+
+    })
+
+  }
+  adoptedCallback() {
+    console.log('o componente foi adotado por outro componenten parent')
+  }
+  disconnectedCallback() {
+    console.log('o componente foi removido DOM');
+  }
+  attributeChangedCallback(name, oldVal, newVal) {
+    /* if (oldVal !== newVal) {
+    console.log('name changed from oldVal to newVal')
+ } */
+    this.render()
+  }
+  createCustomEvents() {
+    //this.nomeDoEventoCustomizado = new CustomEvent('nomeDoEventoCustomizado', {detail: {}});
+  };
+  listenerEventsfromWindow() {
+    //window.addEventListener('nomeDoEventoCustomizadoEscutado', function (e) {});
+  }
+  createAllinstances() {
+    //let elementIdElement = this.shadow.querySelector('#idelement')
+    //this.instanceIdElement = M.componenteMaterialize.init(elementIdElement, {});
+  }
+  listenerEventsfromEscope() {
+    //let context = this
+    //let idcomponente = this.shadow.querySelector('#idcomponente')
+    //idcomponente.addEventListener('click',function(){window.dispatchEvent(context.nomeDoEventoCustomizado);})
+  }
+  render() {
+    this.shadow.innerHTML = /*HTML*/`
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       </head>
@@ -191,7 +334,6 @@ class SideBar extends HTMLElement {
       line-height: 1.8;
       cursor: pointer;
     }
-
       </style>
       
       <aside class="menu" id="aside">
@@ -264,114 +406,9 @@ class SideBar extends HTMLElement {
         </article>
       </aside>
     `
+    this.createAllinstances()
+    this.listenerEventsfromEscope()
   }
-
-  connectedCallback() {
-    const main = document.getElementById("main")
-    if (!localStorage.getItem("id")) {
-      main.innerHTML = "<page-login></page-login>";
-    }
-    this.script();
-  }
-  
-  script() {
-    const idName = this.shadowRoot.getElementById('name-user');
-    const localStorageInfo = localStorage.getItem('id')
-    const userInfo = JSON.parse(localStorageInfo)
-
-    const nameUser = userInfo.nome;
-    const idUser = userInfo.id
-
-    idName.innerHTML = nameUser;
-
-    const sidebar = this.shadowRoot.getElementById('aside');
-    const menuButton = this.shadowRoot.getElementById('menu-button');
-    const items = this.shadowRoot.getElementById('items');
-    const settinsUser = this.shadowRoot.getElementById('settins');
-
-    const textMenu = this.shadowRoot.querySelectorAll('#text-menu');
-    const links = this.shadowRoot.querySelectorAll('a[id="link"]');
-    const apps = this.shadowRoot.querySelectorAll('#apps');
-    const itemsSub = this.shadowRoot.querySelectorAll("#items > li");
-
-    itemsSub.forEach(item => {
-      item.addEventListener("click", () => {
-        const subItem = item.querySelector("#sub-item");
-
-        if (subItem) {
-          if (subItem.style.display === "block") {
-            subItem.style.display = "none";
-          } else {
-            subItem.style.display = "block";
-          }
-        }
-      });
-    });
-
-    menuButton.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      textMenu.forEach(item => {
-        item.classList.toggle('open-text');
-      })
-
-      settinsUser.classList.toggle('open-text');
-      
-      apps.forEach(item => {
-        item.classList.toggle('apps-menu')
-      })
-
-      menuButton.classList.toggle('menu-btn')
-      items.classList.toggle('items')
-      if (menuButton.textContent == "close") {
-        menuButton.innerHTML = "menu"
-      }
-      else {
-        menuButton.innerHTML = "close"
-      }
-    });
-
-    links.forEach(item => {
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
-        console.log(item.textContent)
-        const content = document.getElementById('children')
-        switch (item.textContent) {
-          case "Cadastrar ambulância":
-            content.innerHTML = "";
-            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
-            break;
-
-          case "Consultar ambulância":
-            content.innerHTML = "";
-            content.innerHTML = "<page-view-ambulance></page-view-ambulance>";
-            break;
-
-          case "Cadastrar motorista":
-            content.innerHTML = "";
-            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
-            break;
-
-          case "Consultar motorista":
-            content.innerHTML = "";
-            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
-            break;
-
-          case "Cadastrar ocorrências":
-            content.innerHTML = "";
-            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
-            break;
-
-          case "Consultar ocorrências":
-            content.innerHTML = "";
-            content.innerHTML = "<page-new-ambulance></page-new-ambulance>";
-            break;
-        }
-      });
-
-    })
-
-  }
-
 }
 
-customElements.define("sidebar-menu", SideBar);
+window.customElements.define('sidebar-menu', SideBar);
