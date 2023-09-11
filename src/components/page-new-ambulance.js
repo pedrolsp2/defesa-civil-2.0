@@ -11,8 +11,11 @@ class NewAmbulance extends HTMLElement {
   }
 
   customEvents() {
-    let submitFormAmbulance = new CustomEvent('submitFormAmbulance', { detail: {} });
     let formAmbualance = this.shadowRoot.querySelector('#formAmbualance')
+    let submitFormAmbulance = new CustomEvent('submitFormAmbulance', { 
+      detail: {
+        formulario: formAmbualance
+    } });
     formAmbualance.addEventListener('submit', function (event) {
       event.preventDefault(); // evita que a página recarregue
       window.dispatchEvent(submitFormAmbulance);
@@ -38,8 +41,8 @@ class NewAmbulance extends HTMLElement {
     var txtPlaca = this.shadowRoot.getElementById('placa');
     var txtSituacao = this.shadowRoot.getElementById('situacao');
 
-    btnNovo.addEventListener("click",(e)=>{
-        e.preventDefault();
+    btnNovo.addEventListener("click",(event)=>{
+        event.preventDefault();
         formDisabled();
     })
 
@@ -59,6 +62,10 @@ class NewAmbulance extends HTMLElement {
           txtSituacao.disabled = true;
           btnCad.style.visibility = 'hidden';
           btnNovo.value = "Nova ambulancia";
+          txtModelo.value = "";
+          txtAno.value = "";
+          txtPlaca.value = "";
+          txtSituacao.value = "";
       }
     }
 
@@ -149,27 +156,6 @@ class NewAmbulance extends HTMLElement {
             background-color: #E4661B !important;
         }
 
-        .loader {
-          width: 28px;
-          height: 28px;
-          border: 3px solid #E4661B;
-          border-bottom-color: transparent;
-          border-radius: 50%;
-          display: none;
-          box-sizing: border-box;
-          animation: rotation 1s linear infinite;
-          margin-bottom: 2rem; 
-          }
-
-          @keyframes rotation {
-          0% {
-              transform: rotate(0deg);
-          }
-          100% {
-              transform: rotate(360deg);
-          }
-          } 
-
       </style>
 
       <main>
@@ -192,7 +178,7 @@ class NewAmbulance extends HTMLElement {
               <input type="submit" value="Nova ambulancia" id="btn-novo">
               <input type="submit" value="Cadastrar" id="btn-cadastrar">
           </form>
-          <span class="loader"></span>
+          <span class="loader toggle"></span>
       </main>
     `
   }

@@ -13,8 +13,12 @@ class SideBar extends HTMLElement {
   }
   connectedCallback() {
     const main = document.getElementById("main")
+    const content = document.getElementById("children")
     if (!localStorage.getItem("id")) {
       main.innerHTML = "<page-login></page-login>";
+    }
+    else{
+      content.innerHTML = "<page-home></page-home>";
     }
     this.render()
     this.script()
@@ -191,7 +195,7 @@ class SideBar extends HTMLElement {
     }
     
     section h2 {
-      color: var(--color021);
+      color: var(--color02);
       font-size: 1.5rem;
       margin-bottom: 1rem;
     }

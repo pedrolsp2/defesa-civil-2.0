@@ -12,7 +12,9 @@
       rel="stylesheet">
     <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <meta name="theme-color" content="#E4661B">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+      <meta name="theme-color" content="#E4661B">
     <title>Controle de ocorrências | Defesa Civil</title>
   </head>
   <body>
@@ -22,15 +24,16 @@
         <!-- <div id="children"><page-new-ambulance></page-new-ambulance></div> --> 
         <pages-router id="children"></pages-router> 
       </main>
-
+      
+      <script src="./src/components/page-home.js"></script>
       <script src="./src/components/sidebar-menu.js"></script>
       <script src="./src/components/page-new-ambulance.js"></script>
-      <script src="./src/components/page-home.js"></script>
       <script src="./src/components/page-view-ambulance.js"></script>
       <script src="./src/components/page-login.js"></script>
       <script src="./src/components/pages-router.js"></script>
       <script src="./src/js/events-submit-forms.js"></script>
 
       <script src="./src/js/handle-functions/ambulance.js"></script>
+
   </body>
 </html>
