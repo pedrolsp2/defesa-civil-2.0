@@ -1,55 +1,54 @@
 class SideBar extends HTMLElement {
   constructor() {
-    super()
-    this.shadow = this.attachShadow({ mode: 'open' });
-    this.createCustomEvents()
-    this.listenerEventsfromWindow()
+    super();
+    this.shadow = this.attachShadow({ mode: "open" });
+    this.createCustomEvents();
+    this.listenerEventsfromWindow();
   }
   static get observedAttributes() {
     return [];
   }
   static get observedAttributes() {
-    return []
+    return [];
   }
   connectedCallback() {
-    const main = document.getElementById("main")
-    const content = document.getElementById("children")
+    const main = document.getElementById("main");
+    const content = document.getElementById("children");
     if (!localStorage.getItem("id")) {
       main.innerHTML = "<page-login></page-login>";
-    }
-    else{
+    } else {
       content.innerHTML = "<page-home></page-home>";
     }
-    this.render()
-    this.script()
+    this.render();
+    this.script();
   }
   script() {
-    const idName = this.shadowRoot.getElementById('name-user');
-    const localStorageInfo = localStorage.getItem('id')
-    const userInfo = JSON.parse(localStorageInfo)
+    const idName = this.shadowRoot.getElementById("name-user");
+    const localStorageInfo = localStorage.getItem("id");
+    const userInfo = JSON.parse(localStorageInfo);
 
     const nameUser = userInfo.nome;
-    const idUser = userInfo.id
+    const idUser = userInfo.id;
 
     idName.innerHTML = nameUser;
 
-    const sidebar = this.shadowRoot.getElementById('aside');
-    const menuButton = this.shadowRoot.getElementById('menu-button');
-    const items = this.shadowRoot.getElementById('items');
-    const logo = this.shadowRoot.getElementById('logo');
-    const settinsUser = this.shadowRoot.getElementById('settins');
+    const sidebar = this.shadowRoot.getElementById("aside");
+    const menuButton = this.shadowRoot.getElementById("menu-button");
+    const items = this.shadowRoot.getElementById("items");
+    const logo = this.shadowRoot.getElementById("logo");
+    const settinsUser = this.shadowRoot.getElementById("settins");
 
-    const textMenu = this.shadowRoot.querySelectorAll('#text-menu');
+    const textMenu = this.shadowRoot.querySelectorAll("#text-menu");
     const links = this.shadowRoot.querySelectorAll('a[id="link"]');
-    const apps = this.shadowRoot.querySelectorAll('#apps');
+    const apps = this.shadowRoot.querySelectorAll("#apps");
     const itemsSub = this.shadowRoot.querySelectorAll("#items > li");
-    const content = document.getElementById('children')
+    const content = document.getElementById("children");
 
-    logo.addEventListener("click",()=>{
-      content.innerHTML = "<page-home><page-home/>"
-    })
+    logo.addEventListener("click", () => {
+      content.innerHTML = "<page-home><page-home/>";
+    });
 
-    itemsSub.forEach(item => {
+    itemsSub.forEach((item) => {
       item.addEventListener("click", () => {
         const subItem = item.querySelector("#sub-item");
 
@@ -63,32 +62,31 @@ class SideBar extends HTMLElement {
       });
     });
 
-    menuButton.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      textMenu.forEach(item => {
-        item.classList.toggle('open-text');
-      })
+    menuButton.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+      textMenu.forEach((item) => {
+        item.classList.toggle("open-text");
+      });
 
-      settinsUser.classList.toggle('open-text');
+      settinsUser.classList.toggle("open-text");
 
-      apps.forEach(item => {
-        item.classList.toggle('apps-menu')
-      })
+      apps.forEach((item) => {
+        item.classList.toggle("apps-menu");
+      });
 
-      menuButton.classList.toggle('menu-btn')
-      items.classList.toggle('items')
+      menuButton.classList.toggle("menu-btn");
+      items.classList.toggle("items");
       if (menuButton.textContent == "close") {
-        menuButton.innerHTML = "menu"
-      }
-      else {
-        menuButton.innerHTML = "close"
+        menuButton.innerHTML = "menu";
+      } else {
+        menuButton.innerHTML = "close";
       }
     });
 
-    links.forEach(item => {
+    links.forEach((item) => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log(item.textContent)
+        console.log(item.textContent);
         switch (item.textContent) {
           case "Cadastrar ambulância":
             content.innerHTML = "";
@@ -121,25 +119,23 @@ class SideBar extends HTMLElement {
             break;
         }
       });
-
-    })
-
+    });
   }
   adoptedCallback() {
-    console.log('o componente foi adotado por outro componenten parent')
+    console.log("o componente foi adotado por outro componenten parent");
   }
   disconnectedCallback() {
-    console.log('o componente foi removido DOM');
+    console.log("o componente foi removido DOM");
   }
   attributeChangedCallback(name, oldVal, newVal) {
     /* if (oldVal !== newVal) {
     console.log('name changed from oldVal to newVal')
  } */
-    this.render()
+    this.render();
   }
   createCustomEvents() {
     //this.nomeDoEventoCustomizado = new CustomEvent('nomeDoEventoCustomizado', {detail: {}});
-  };
+  }
   listenerEventsfromWindow() {
     //window.addEventListener('nomeDoEventoCustomizadoEscutado', function (e) {});
   }
@@ -148,12 +144,28 @@ class SideBar extends HTMLElement {
     //this.instanceIdElement = M.componenteMaterialize.init(elementIdElement, {});
   }
   listenerEventsfromEscope() {
-    //let context = this
-    //let idcomponente = this.shadow.querySelector('#idcomponente')
-    //idcomponente.addEventListener('click',function(){window.dispatchEvent(context.nomeDoEventoCustomizado);})
+    var trigger = this.shadowRoot.getElementById('logout')
+    var notLogout = this.shadowRoot.getElementById('notLogout')
+    var confirmed = this.shadowRoot.getElementById('confirmed')
+
+    trigger.addEventListener("click",()=>{
+      this.shadowRoot.getElementById('c_logout').classList.toggle("toggleLogout")
+    })
+
+    notLogout.addEventListener("click",()=>{
+      this.shadowRoot.getElementById('c_logout').classList.toggle("toggleLogout")
+    })
+
+    confirmed.addEventListener("click",()=>{
+      localStorage.removeItem("id");
+      setTimeout(()=>{
+        window.location.href = "/"
+      },500)
+    })
+
   }
   render() {
-    this.shadow.innerHTML = /*HTML*/`
+    this.shadow.innerHTML = /*HTML*/ `
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       </head>
@@ -338,6 +350,28 @@ class SideBar extends HTMLElement {
       line-height: 1.8;
       cursor: pointer;
     }
+
+    #c_logout{
+      display: none;
+    }
+
+    .toggleLogout{
+      display: block !important;
+    }
+
+    #c_logout small{
+      font-weight: bold;
+    }
+
+    #c_logout button{
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    #notLogout{
+        color: #f00;
+      }
       </style>
       
       <aside class="menu" id="aside">
@@ -405,14 +439,19 @@ class SideBar extends HTMLElement {
           <span class="material-symbols-outlined">account_circle</span>
           <span id="settins">
             <span id="name-user"></span>
-            <small>Sair</small>
+            <small id="logout">Sair</small>
+            <span id="c_logout">
+              <small>Deseja realmente sair?</small>
+              <button id="notLogout">Não</button>
+              <button id="confirmed">Sim</button>
+            </span>
           </span>
         </article>
       </aside>
-    `
-    this.createAllinstances()
-    this.listenerEventsfromEscope()
+    `;
+    this.createAllinstances();
+    this.listenerEventsfromEscope();
   }
 }
 
-window.customElements.define('sidebar-menu', SideBar);
+window.customElements.define("sidebar-menu", SideBar);

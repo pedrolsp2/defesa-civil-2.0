@@ -32,8 +32,8 @@
 main{
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: .5rem;
-}
+  gap: .5rem;  
+} 
 
 #children{
   border: 1px solid #ff00;
